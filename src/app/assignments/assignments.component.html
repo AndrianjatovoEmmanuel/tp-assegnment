@@ -1,0 +1,28 @@
+<main>
+    <a routerLink="/addAssignment">
+        <button mat-raised-button color="primary">Add Assignment</button>
+    </a>
+
+    <mat-card *ngFor="let ass of assignments">
+        <nav>
+            <a routerLink="/detailsAssignment/{{ass.id}}">
+                <mat-card-title>{{ass.nom}}</mat-card-title>
+                <mat-card-subtitle>{{ass.dateDeRendu |date:'dd/MM/YYYY'}}</mat-card-subtitle>
+                <mat-card-content dense>
+                    <p *ngIf="ass.rendu ; else nonsoumis" appRendu>
+                        Soumis
+                    </p>
+                    <ng-template #nonsoumis>
+                        <p appNonrendu>
+                            Non rendue
+                        </p>
+                    </ng-template>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-button>Like</button>
+                    <button mat-button>SHARE</button>
+                </mat-card-actions>
+            </a>
+        </nav>
+    </mat-card>
+</main>
