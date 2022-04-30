@@ -1,61 +1,84 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { Assignment } from '../assignments/assignments.model';
+import { Statistique } from '../model/statistique.model';
+import { dataAssignment } from './data_assignments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssignmentsService {
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
   
-  assignments:Assignment[] = [
-    {
-      id:1,
-      nom:"TP1,creer une application pour gerer les stocks du magasin ABM", 
-      dateDeRendu : new Date("2022-11-17"),
-      rendu:true
-    },
-    {
-      id:2,
-      nom:"Installation des environnements pour Mopolo", 
-      dateDeRendu : new Date('2022-03-18'),
-      rendu:false
-    },
-    {
-      id:3,
-      nom:"Classification des produits", 
-      dateDeRendu : new Date("2022-07-20"),
-      rendu:false
-    }
-  ]
+  //uri="http://localhost:8010/api/"
+  uri="https://backitumbdsemmanul.herokuapp.com/api/"
 
-  getAssignments():Observable<Assignment[]>{
-    return of(this.assignments);
+  //getAssignments():Observable<Assignment[]>{
+    //return this.http.get<Assignment[]>(this.uri+"assignments");
+  //}
+  getAssignments(page:number,limit:number):Observable<any>{
+    console.log(this.uri+"assignments?pages="+page+"&limit="+limit)
+    return this.http.get<Assignment[]>(this.uri+"assignments?page="+page+"&limit="+limit);
+  }
+
+  getAssignmentsMax():Observable<any>{
+    return this.http.get<Assignment[]>(this.uri+"assignmentsmax");
   }
 
   getAssignmentById(id:number):Observable<Assignment|undefined>{
-    let result=this.assignments.find(a=> a.id == id);
-    console.log(result?.id)
-    return of(result);
+    return this.http.get<Assignment>(this.uri+"assignments/"+id);
   }
 
-  addAssignments(assignment:Assignment):Observable<string>{
-    this.assignments.push(assignment);
-    return of("Assignment ajouter");
+  addAssignments(assignment:Assignment):Observable<any>{
+    return this.http.post<Assignment>(this.uri+"assignments/",assignment);
   }
 
-  updateAssignments(assignment:Assignment):Observable<string>{
-    const index = this.assignments.indexOf(assignment)
-    this.assignments[index]=assignment;
-    return of("Assignment Modifier");
+  updateAssignments(assignment:Assignment):Observable<any>{
+    return this.http.put<Assignment>(this.uri+"assignments/",assignment);
   }
 
-  deleteAssignments(assignment:Assignment):Observable<string>{
-    const index = this.assignments.indexOf(assignment)
-    this.assignments.splice(index, 1);
-    return of("Assignment Supprimer");
+  deleteAssignments(assignment:Assignment):Observable<any>{
+    return this.http.delete(this.uri+"assignments/"+assignment._id);
+  }
+
+  getStatMatiere():Observable<any>{
+    console.log(this.uri+"statmatiere");
+    return this.http.get<Statistique>(this.uri+"statmatiere");
+  }
+
+  CountAssignment():Observable<any>{
+    console.log(this.uri+"statmatiere");
+    return this.http.get<number>(this.uri+"countAssignments");
+  }
+
+  CountAssignmentRendu():Observable<any>{
+    console.log(this.uri+"statmatiere");
+    return this.http.get<number>(this.uri+"countAssignmentsRendu");
+  }
+
+  CountAssignmentNonRendu():Observable<any>{
+    console.log(this.uri+"statmatiere");
+    return this.http.get<number>(this.uri+"countAssignmentsNonRendu");
+  }
+
+  peuplerBd(){
+    dataAssignment.forEach(a => { 
+      let newassignment=new Assignment();
+      newassignment.id=a.id;
+      newassignment.nom=a.nom;
+      newassignment.dateDeRendu=new Date(a.dateDeRendu);
+      newassignment.rendu=a.rendu;
+      newassignment.idAuteur=a.idAuteur;
+      newassignment.idMatiere=a.idMatiere;
+      newassignment.remarque=a.remarque;
+      newassignment.note=a.note;
+      this.addAssignments(newassignment)
+      .subscribe(reponse => {
+        console.log(reponse.message)
+      })
+    });
   }
 
 }

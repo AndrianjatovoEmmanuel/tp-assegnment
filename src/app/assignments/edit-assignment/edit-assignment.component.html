@@ -1,18 +1,55 @@
-<div class="container" *ngIf="assignment">
-    <h1>Edition de l'assignment {{assignment.nom}}</h1>
-    <form ngForm class="form" #formupdate (submit)="onSaveAssignment(); formupdate.reset(); ">
-        <mat-form-field>
-            <input matInput placeholder="Edition du nom" [(ngModel)]="nom" name="assignment-name">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Edition de la date" [(ngModel)]="dateDeRendu"
-                name="date">
-            <mat-datepicker-toggle matSuffix [for]="picker">
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <button mat-raised-button color="primary" [disabled]="((!nom)||(!dateDeRendu))">
-            Sauver
-        </button>
-    </form>
+<div class="col-md-12 mb-lg-0 mb-4" >
+  <div class="card mt-4">
+    <div class="card-header p-3">
+      <div class="row">
+        <div class="col-6 d-flex align-items-center">
+          <h6 class="mb-0">Edit assignment : {{nom}}</h6>
+        </div>
+      </div>
+    </div>
+    <div class="card-body p-3" *ngIf="assignment">
+      <mat-stepper orientation="vertical">
+        <form ngForm class="form" #formupdate >
+        <mat-step>
+          <ng-template matStepLabel>Step 1</ng-template>
+          <ng-template matStepContent>
+            <p></p>
+            <div class="input-group input-group-outline my-3">
+              <input class="form-control" [(ngModel)]="nom" placeholder="Assignment" name="nom" required>
+              
+            </div>
+            <div class="input-group input-group-outline mb-3">
+              <input type="date" class="form-control" datetime="yyyy-MM-dd" [ngModel]="dateDeRendu | date:'yyyy-MM-dd'" (ngModelChange)="dateDeRendu=$event" name="daterendu" required>
+            </div>
+            <button mat-button matStepperNext>Next</button>
+          </ng-template>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Step 2</ng-template>
+          <ng-template matStepContent>
+            <p></p>
+            <div class="input-group input-group-outline my-3">
+              <select class="form-control"  placeholder="Choose topics" [(ngModel)]="idMatiere" name="idMatiere" required>
+                <option *ngFor="let mat of matiere" [ngValue]="mat.id">
+                  {{ mat.matiere }}
+                </option>
+              </select>
+            </div>
+            <div class="input-group input-group-outline my-3">
+              <textarea class="form-control"  rows="3" [(ngModel)]="remarque" name="remarque"></textarea>
+            </div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </ng-template>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Step 3</ng-template>
+          <p>Everithing is done</p>
+          <button mat-button matStepperPrevious type="submit" >back</button>
+          <button mat-button type="submit" (click)="onSaveAssignment();">Confirm</button>
+        </mat-step>
+      </form>
+      </mat-stepper>
+    </div>
+  </div>
 </div>

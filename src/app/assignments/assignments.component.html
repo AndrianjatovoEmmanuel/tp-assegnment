@@ -1,28 +1,50 @@
-<main>
-    <a routerLink="/addAssignment">
-        <button mat-raised-button color="primary">Add Assignment</button>
-    </a>
+<div class="col-md-12 mb-lg-0 mb-4">
+    <div class="card mt-4">
+        <div class="card-header pb-0 p-3">
+            <div class="row">
+                <div class="col-6 d-flex align-items-center">
+                    <h6 class="mb-0">Assignment Lists</h6>
+                    <br />
 
-    <mat-card *ngFor="let ass of assignments">
-        <nav>
-            <a routerLink="/detailsAssignment/{{ass.id}}">
-                <mat-card-title>{{ass.nom}}</mat-card-title>
-                <mat-card-subtitle>{{ass.dateDeRendu |date:'dd/MM/YYYY'}}</mat-card-subtitle>
-                <mat-card-content dense>
-                    <p *ngIf="ass.rendu ; else nonsoumis" appRendu>
-                        Soumis
-                    </p>
-                    <ng-template #nonsoumis>
-                        <p appNonrendu>
-                            Non rendue
-                        </p>
-                    </ng-template>
-                </mat-card-content>
-                <mat-card-actions align="end">
-                    <button mat-button>Like</button>
-                    <button mat-button>SHARE</button>
-                </mat-card-actions>
-            </a>
-        </nav>
-    </mat-card>
-</main>
+                </div>
+
+                <div class="col-6 text-end">
+                    <a class="btn bg-gradient-dark mb-0" routerLink="/addAssignment"><i
+                            class="material-icons text-sm">add</i>&nbsp;&nbsp;Nouvelle
+                        Assignment</a>
+                </div>
+            </div>
+        
+        </div>
+        <div class="card-body p-3">
+            <button type="button" class="btn btn-secondary btn-sm"(click)="pagePrecedente()" [disabled]="page===1" >Previous</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="pageSuivante()" style="margin-left: 10px;">Next</button>
+            <ul class="list-group">
+                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg"
+                    *ngFor="let ass of assignments">
+                    <div class="d-flex flex-column">
+                        <h6 class="mb-3 text-sm">{{ass.nom}}</h6>
+                        <span class="mb-2 text-xs">Date : <span
+                                class="text-dark font-weight-bold ms-sm-2">{{ass.dateDeRendu
+                                |date:'dd/MM/YYYY'}}</span></span>
+                         <span class="mb-2 text-xs">Note : <span class="text-dark font-weight-bold ms-sm-2">{{ass.note}}</span></span>
+                        <span class="mb-2 text-xs" dense>Statut :
+                            <span class="ms-sm-2 font-weight-bold" *ngIf="ass.rendu ; else nonsoumis"
+                                appRendu>Rendu</span>
+                            <ng-template #nonsoumis>
+                                <span class="ms-sm-2 font-weight-bold" appNonrendu>Nom rendu</span>
+                            </ng-template>
+                        </span>
+                    </div>
+                    <div class="ms-auto text-end">
+                        <div class="d-flex px-2 py-1">
+                            
+                        </div>
+                        <a class="btn btn-link text-dark px-3 mb-0" routerLink="/detailsAssignment/{{ass.id}}"><i
+                                class="fa fa-ellipsis-v text-lg"></i></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

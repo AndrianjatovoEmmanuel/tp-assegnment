@@ -24,13 +24,21 @@ import { AddAssignmentComponent } from './assignments/add-assignment/add-assignm
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { Routes, RouterModule } from '@angular/router';
 import { EditAssignmentComponent } from './assignments/edit-assignment/edit-assignment.component';
+import { AuthenticationGuard } from './shared/authentication.guard';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import {MatStepperModule} from '@angular/material/stepper';
+import {ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from "@angular/common/http";
+
 
 const routes:Routes=[
-  {path:"",component:AssignmentsComponent},
+  {path:"",component:AppComponent},
   {path:"home",component:AssignmentsComponent},
   {path:"addAssignment",component:AddAssignmentComponent},
   {path:"detailsAssignment/:id",component:AssignmentDetailsComponent},
-  {path:"editAssignment/:id/edit",component:EditAssignmentComponent}
+  {path:"editAssignment/:id/edit",component:EditAssignmentComponent,canActivate:[AuthenticationGuard]},
+  {path:"dashboard",component:DashboardComponent}
 ]
 
 
@@ -42,7 +50,8 @@ const routes:Routes=[
     NonrenduDirective,
     AssignmentDetailsComponent,
     AddAssignmentComponent,
-    EditAssignmentComponent
+    EditAssignmentComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +70,12 @@ const routes:Routes=[
     MatGridListModule,
     MatCheckboxModule,
     MatToolbarModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    MatSlideToggleModule,
+    MatStepperModule,
+    ReactiveFormsModule,
+    HttpClientModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

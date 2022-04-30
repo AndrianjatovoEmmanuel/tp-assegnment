@@ -13,22 +13,40 @@ export class AssignmentsComponent implements OnInit {
   dateRendu!:Date;
   assignmentselectionne?: Assignment;
   assignments:Assignment[]=[];
+  //pagination
+  page:number=1;
+  limit:number=10;
 
   constructor(private assignmentservice:AssignmentsService) {}
 
-  ngOnInit(): void {
-    //demander les données 
+  /*ngOnInit(): void {
     this.assignmentservice.getAssignments()
     .subscribe(assignments => {
       this.assignments=assignments
     })
+  }*/
 
+  ngOnInit(): void {
+    this.getAssignment()
   }
 
-
-  assignmentclick(assignment:Assignment){
-    this.assignmentselectionne=assignment
-    console.log("nom=" + this.nomAssignement +"a rendre le " + this.dateRendu)
+  getAssignment(){
+    console.log("page"+this.page)
+    this.assignmentservice.getAssignments(this.page,this.limit)
+    .subscribe(reponse=> {
+      this.assignments=reponse.docs;
+    })
   }
 
+  pageSuivante(){
+    console.log("suiv")
+    this.page++;
+    this.getAssignment();
+  }
+
+  pagePrecedente(){
+    console.log("prec")
+    this.page--;
+    this.getAssignment();
+  }
 }

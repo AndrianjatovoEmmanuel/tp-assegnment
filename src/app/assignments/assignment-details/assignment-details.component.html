@@ -1,13 +1,77 @@
-<div class="container"> 
-<mat-card *ngIf="assignmenTransmis">
-    
-    <mat-card-subtitle>{{assignmenTransmis.nom}}</mat-card-subtitle>
-    <mat-card-subtitle>{{assignmenTransmis.dateDeRendu |date:'dd/MM/YYYY'}}</mat-card-subtitle>
-    
-    <mat-card-actions>
-        <mat-checkbox class="example-margin" (change)="onAssingmentRendu()" *ngIf="!assignmenTransmis.rendu" >Rendu</mat-checkbox>
-        <button mat-raised-button color="warn" (click)="onAssignmentDelete()">Delete</button>
-        <button mat-raised-button color="primary" routerLink="/editAssignment/{{assignmenTransmis.id}}/edit">Edit</button>
-    </mat-card-actions>
-</mat-card>
+<div class="row" *ngIf="assignmenTransmis">
+  <div class="col-md-8 mt-4">
+    <div class="card h-100">
+      <div class="card-header pb-0 px-3">
+        <h6 class="mb-0">Assignment Details</h6>
+      </div>
+      <div class="card-body pt-4 p-3">
+        <ul class="list-group">
+          <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+            <div class="d-flex flex-column">
+              <h5 class="mb-1">{{assignmenTransmis.nom}}</h5>
+              <span class="mb-2 text-xs">Delivery date : <span class="text-dark font-weight-bold ms-sm-2">{{assignmenTransmis.dateDeRendu
+                |date:'dd/MM/YYYY'}}</span></span>
+                <span class="mb-2 text-xs">Note : <span class="text-dark font-weight-bold ms-sm-2">{{assignmenTransmis.remarque}}</span></span>
+                <br/>
+                <span class="mb-2 text-xs" dense>
+                  <span class="ms-sm-2 font-weight-bold" *ngIf="assignmenTransmis.note==0 ; else nonsoumis">
+                    <input class="form-control form-control-sm" type="text" placeholder="" [(ngModel)]="notesoumis" nom="notesoumis">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="onAssingmentNote()">Noter</button>
+                  </span>
+                  <ng-template #nonsoumis>
+                    <mat-checkbox class="example-margin" (change)="onAssingmentRendu()" *ngIf="!assignmenTransmis.rendu">Rendu
+                    </mat-checkbox>
+                  </ng-template>
+                </span>
+                
+              
+            </div>
+            <div class="ms-auto text-end">
+              <a class="btn btn-link text-danger text-gradient px-3 mb-0" (click)="onAssignmentDelete()"><i
+                  class="material-icons text-sm me-2">delete</i>Delete</a>
+              <a class="btn btn-link text-dark px-3 mb-0" routerLink="/editAssignment/{{assignmenTransmis.id}}/edit"
+              *ngIf="isAdmin"><i
+                  class="material-icons text-sm me-2">edit</i>Edit</a>
+            </div>
+          </li>
+          <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+            <div class="col-auto">
+              <div class="avatar avatar-xl position-relative">
+                <img src="../assets/img/{{auteurassignment?.photo}}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+              </div>
+            </div>
+            <div class="col-auto my-auto">
+              <div class="h-100">
+                <h6 class="mb-1">
+                  {{auteurassignment?.nom}} {{auteurassignment?.prenom}}
+                </h6>
+                <p class="mb-0 font-weight-normal text-sm">
+                  Username : {{auteurassignment?.nomUtilisateur}}
+                </p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mt-4" *ngIf="matiereassignment">
+    <div class="card h-100 mb-4">
+      <div class="card-header ">
+        <a class="d-block shadow-xl border-radius-xl">
+          <img src="../assets/img/{{matiereassignment.photo}}" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg">
+        </a>
+      </div>
+      <div class="card-body p-3">
+        <a href="javascript:;">
+          <h6>
+            {{matiereassignment.matiere}}
+          </h6>
+        </a>
+        <p class="mb-4 text-sm">
+          
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
